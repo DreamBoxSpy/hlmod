@@ -1,0 +1,3 @@
+[submodule "hlmod-hl"]
+	path = hlmod-hl
+	url = https://github.com/N3rdL0rd/hlmod-hl
