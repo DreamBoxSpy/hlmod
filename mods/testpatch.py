@@ -8,10 +8,7 @@ MOD_INFO = {
 
 from modcore import log, hook
 
-def initialize():
-    """Called by hlmod when this mod is loaded."""
-    log("testpatch", "Hello from modcore!")
-
 @hook(29)
-def hook_thing():
+def hook_thing(*args, **kwargs):
+    print(args, kwargs)
     print("Made it!")
