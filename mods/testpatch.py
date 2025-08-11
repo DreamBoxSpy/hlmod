@@ -6,7 +6,7 @@ MOD_INFO = {
     "dependencies": ["modcore"]
 }
 
-from modcore import log, hook
+from modcore import hook
 
 @hook(29)
 def hook_thing(*args, **kwargs):

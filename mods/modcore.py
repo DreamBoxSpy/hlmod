@@ -35,5 +35,6 @@ def hook(findex: int):
 
 def initialize():
     """Called by hlmod when this mod is loaded."""
-    log("modcore", "Hello from modcore!")
+    log("modcore", "hlmod modcore 0.0.1 initialized!")
+    
     
