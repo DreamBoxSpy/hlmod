@@ -10,10 +10,6 @@ MOD_INFO = {
     "dependencies": []
 }
 
-def log(mod_id: str, *args):
-    print(f"[{mod_id}] ", end="")
-    print(*args)
-
 def hook(findex: int|List[int]):
     """
     A decorator that registers the decorated function as a hook for a given
