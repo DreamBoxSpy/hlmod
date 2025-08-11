@@ -9,6 +9,10 @@ MOD_INFO = {
 from modcore import hook
 
 @hook(29)
-def hook_thing(*args, **kwargs):
-    print(args, kwargs)
-    print("Made it!")
+def hook_getval(hook, *args):
+    return hook.call_original(*args) * 2
+
+@hook(30)
+def hook_print(hook, *args):
+    print(args)
+    return hook.call_original(*args)
