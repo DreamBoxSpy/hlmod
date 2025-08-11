@@ -114,3 +114,9 @@ Then, binaries will be at `hlmod-hl/build/bin`, as normal.
 
 > [!NOTE]
 > The `hl` JIT VM binary built from `hlmod-hl` expects there to be a directory `./mods` from the working dir, containing mods to be loaded! You should copy over `hlmod.pyi` and `modcore.py` from this repo's `mods/` directory as the base library for other mods to reference.
+
+## Design Philosophy
+
+- Modify the JIT compiler as LITTLE as possible. The more assembly we generate, the more unstable the VM becomes. Keep your ASM short, and write trampolines to C instead of full routines.
+- The end user shouldn't have to memorize internal HL incantations to be able to write a basic mod. When in doubt, cast to and from a similar builtin Python class rather than write a full wrapper that may have incompatibilities with Python's std.
+- Keep low-level APIs on the C side, then wrap them in nice Pythonic functions in `modcore`. For example, `hlmod.register_hook` is wrapped by a Pythonic decorator in `modcore.hook`.

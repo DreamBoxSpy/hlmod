@@ -16,10 +16,12 @@ def hook(findex: int|List[int]):
     Hashlink function index (findex).
 
     Usage:
-        @hook(296)
-        def my_hook(hook, *args):
-            # ... your hook logic ...
-            hook.call_original(*args)
+    ```
+    @hook(296)
+    def my_hook(hook, *args):
+        # ... your hook logic ...
+        hook.call_original(*args)
+    ```
     """
     if not isinstance(findex, (int, list)):
         raise TypeError("The @hook decorator requires an integer findex or a list of integer findexes.")
