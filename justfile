@@ -4,7 +4,7 @@ build:
 prepare:
     rm -Rf hlmod-hl/build
     mkdir -p hlmod-hl/build
-    cd hlmod-hl/build && cmake ..
+    cd hlmod-hl/build && cmake -G "Ninja" ..
 
 # VS2022 Community: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvarsall.bat"
 # VS2019 Community: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Auxiliary/Build/vcvarsall.bat"
