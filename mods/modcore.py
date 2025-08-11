@@ -1,5 +1,6 @@
 import inspect
 import hlmod
+from typing import List
 
 MOD_INFO = {
     "id": "modcore",
@@ -13,28 +14,27 @@ def log(mod_id: str, *args):
     print(f"[{mod_id}] ", end="")
     print(*args)
 
-def hook(findex: int):
+def hook(findex: int|List[int]):
     """
     A decorator that registers the decorated function as a hook for a given
     Hashlink function index (findex).
 
     Usage:
-        @on_hook(296)
-        def my_hook_callback(hook, *args):
+        @hook(296)
+        def my_hook(hook, *args):
             # ... your hook logic ...
             hook.call_original(*args)
     """
-    if not isinstance(findex, int):
-        raise TypeError("The @on_hook decorator requires an integer findex.")
+    if not isinstance(findex, (int, list)):
+        raise TypeError("The @hook decorator requires an integer findex or a list of integer findexes.")
 
     def decorator(func):
-        hlmod.register_hook(findex, func)
+        if isinstance(findex, int):
+            hlmod.register_hook(findex, func) # pyright: ignore[reportAttributeAccessIssue]
+        else:
+            for fidx in findex:
+                hlmod.register_hook(fidx, func) # pyright: ignore[reportAttributeAccessIssue]
         return func
     
     return decorator
 
-def initialize():
-    """Called by hlmod when this mod is loaded."""
-    log("modcore", "hlmod modcore 0.0.1 initialized!")
-    
-    
