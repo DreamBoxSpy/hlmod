@@ -1,11 +1,34 @@
 from typing import Any, Protocol
 
+class HlPtr:
+    """
+    Light wrapper on a raw void* to an HL object.
+    """
+    
+    @property
+    def ptr(self) -> int:
+        """
+        The raw value of the pointer, as an int.
+        """
+        ...
+        
+    @property
+    def kind(self) -> int:
+        """
+        The HL type kind of this pointer.
+        """
+        ...
+    
+
 class Hook:
     """
     Hook context object
     """
     
     findex: int
+    """
+    The function index this hook was invoked for.
+    """
     
     def call_original(*args: Any) -> Any:
         """
