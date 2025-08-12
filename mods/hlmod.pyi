@@ -5,6 +5,8 @@ class Hook:
     Hook context object
     """
     
+    findex: int
+    
     def call_original(*args: Any) -> Any:
         """
         Calls the original function that was hooked.
