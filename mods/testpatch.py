@@ -7,6 +7,7 @@ MOD_INFO = {
 }
 
 from modcore import hook
+from hlmod import get_obj_field
 
 @hook(29)
 def hook_getval(hook, *args):
@@ -14,5 +15,6 @@ def hook_getval(hook, *args):
 
 @hook(30)
 def hook_print(hook, *args):
-    print(args)
+    print(args[2])
+    print(get_obj_field(args[2]._hlmod_ptr, "bytes"))
     return hook.call_original(*args)

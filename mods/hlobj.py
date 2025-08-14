@@ -2,8 +2,22 @@
 Abstract base classes for accessing HL types in Python.
 """
 
-from hlmod import HlPtr, get_obj_field, set_obj_field # pyright: ignore[reportAttributeAccessIssue]
-from typing import Any
+from hlmod import HlPtr, register_hlobj, get_obj_field, set_obj_field # pyright: ignore[reportAttributeAccessIssue]
+from typing import Any, Callable, Type, TypeVar
+
+T = TypeVar("T", bound=object)
+
+def hltype(idx: int) -> Callable[[Type[T]], Type[T]]:
+    """
+    A class decorator that registers a class in a global registry with a given index.
+    """
+
+    def decorator(cls: Type[T]) -> Type[T]:
+        """The actual decorator that registers the class."""
+        register_hlobj(idx, cls)
+        return cls
+        
+    return decorator
 
 class HlObject:
     __slots__ = ("_hlmod_ptr")
