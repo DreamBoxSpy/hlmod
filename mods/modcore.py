@@ -1,3 +1,7 @@
+"""
+Common modding routines for Hashlink games.
+"""
+
 import inspect
 import hlmod
 from typing import List

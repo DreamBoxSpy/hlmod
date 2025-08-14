@@ -1,3 +1,7 @@
+"""
+Internal, low-level module to interface more directly with hlmod. You should use `modcore` for 99% of cases, which provides much higher-level abstractions over this module!
+"""
+
 from typing import Any, Protocol
 
 class HlPtr:
