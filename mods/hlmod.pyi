@@ -63,3 +63,14 @@ def register_hook(
                   triggered. Will be passed an hlmod.Hook object and the original args from the function call.
     """
     ...
+
+def get_obj_field(obj: HlPtr, field: int) -> Any:
+    """
+    Gets a field from a Obj* by index.
+    """
+    ...
+    
+def set_obj_field(obj: HlPtr, field: int, value: Any) -> None:
+    """
+    Sets a field in an Obj* by index.
+    """

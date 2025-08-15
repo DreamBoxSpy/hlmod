@@ -1,6 +1,6 @@
 # hlmod
 
-A generic modding framework for Hashlink, powered by Python
+A generic modding framework for Hashlink, powered by Python. The spiritual successor to [pyhl](https://github.com/N3rdL0rd/crashlink/tree/main/pyhl).
 
 ## Introduction; Or, "Why another modding framework? Don't we already have DCCM?"
 

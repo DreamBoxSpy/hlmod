@@ -27,11 +27,11 @@ class HlObject:
         # TODO: python-side instancing
         self._hlmod_ptr = ptr
     
-    def _hlmod_get_field(self, name: str) -> Any:
-        return get_obj_field(self._hlmod_ptr, name)
+    def _hlmod_get_field(self, idx: int) -> Any:
+        return get_obj_field(self._hlmod_ptr, idx)
 
-    def _hlmod_set_field(self, name: str, value: Any) -> None:
-        set_obj_field(self._hlmod_ptr, name, value)
+    def _hlmod_set_field(self, idx: int, value: Any) -> None:
+        set_obj_field(self._hlmod_ptr, idx, value)
 
     def _hlmod_call_proto(self, name: str, *args: Any) -> Any:
         return NotImplemented
