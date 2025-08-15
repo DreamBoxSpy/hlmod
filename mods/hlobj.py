@@ -9,7 +9,7 @@ T = TypeVar("T", bound=object)
 
 def hltype(idx: int) -> Callable[[Type[T]], Type[T]]:
     """
-    A class decorator that registers a class in a global registry with a given index.
+    Register a HlObject to be created as a proxy for a specific tIndex in the bytecode.
     """
 
     def decorator(cls: Type[T]) -> Type[T]:
