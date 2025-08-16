@@ -14,7 +14,7 @@ prepare-win:
     #!cmd.exe /C
     IF EXIST hlmod-hl\build rmdir /s /q hlmod-hl\build
     mkdir hlmod-hl\build
-    cd hlmod-hl\build && "{{MSVC_VARS_SCRIPT}}" x64 && cmake -G "Ninja" .. -DCMAKE_TOOLCHAIN_FILE=D:/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows
+    cd hlmod-hl\build && "{{MSVC_VARS_SCRIPT}}" x64 && cmake -G "Ninja" .. -DCMAKE_TOOLCHAIN_FILE=D:/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows -DCMAKE_BUILD_TYPE=Release
 
 build-win:
     #!cmd.exe /C
