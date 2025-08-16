@@ -22,3 +22,7 @@ build-win:
 
 run:
     PYTHONPATH=/home/nerd/code/hlmod/.venv hlmod-hl/build/bin/hl PatchMe.hl
+
+run-win:
+    #!cmd.exe /C
+    hlmod-hl\build\bin\hl.exe PatchMe.hl
