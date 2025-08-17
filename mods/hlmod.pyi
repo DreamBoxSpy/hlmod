@@ -74,3 +74,17 @@ def set_obj_field(obj: HlPtr, field: int, value: Any) -> None:
     """
     Sets a field in an Obj* by index.
     """
+    ...
+    
+def get_fixed_prng() -> bool:
+    """
+    Gets if the HL PRNG is currently set to be fixed or not.
+    """
+    ...
+    
+def set_fixed_prng(value: bool) -> None:
+    """
+    Sets if the HL PRNG should be fixed or not.
+    When fixed, the seed is set to 4644546 and the PID is spoofed to 0.
+    """
+    ...
