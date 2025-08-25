@@ -1,3 +1,6 @@
 [submodule "hlmod-hl"]
 	path = hlmod-hl
 	url = https://github.com/N3rdL0rd/hlmod-hl
+[submodule "std_doc/haxe"]
+	path = std_doc/haxe
+	url = https://github.com/HaxeFoundation/haxe

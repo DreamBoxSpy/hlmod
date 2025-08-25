@@ -22,7 +22,7 @@ hlmod aims to be a truly generic, easy-to-use Hashlink modding framework that Ju
 - [x] Basic Python mods as modules, resolve dependencies, mod metadata
 - [x] JIT hooking to Python
 - [x] Basic casting of primitives from HL -> Python and Python -> HL
-- [ ] HNULL casting support
+- [x] HNULL casting support
 - [ ] Obj wrappers, metaclasses and Python interfaces for HL objects
 - [ ] Hook a function by name
 - [ ] String utilities

@@ -7,10 +7,10 @@ MOD_INFO = {
 }
 
 from modcore import hook
-from hlmod import get_obj_field
+from hlmod import get_obj_field, Hook
 
-
-# @hook(30)
-# def hook_print(hook, *args):
-#     print(args)
-#     return hook.call_original(2.0, 1.0, "Hello, world!", args[3])
+@hook(30)
+def thing(self: Hook, *args):
+    args = list(args)
+    args[1] = None
+    self.call_original(*args)
