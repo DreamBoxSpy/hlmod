@@ -33,16 +33,33 @@ P_FIELD = re.compile(
 )
 
 def clean_doc_comment(raw_doc: str) -> str:
-    """Cleans a raw doc comment string by removing comment markers."""
+    """
+    Cleans a raw doc comment string by removing comment markers and
+    dedenting the content to preserve internal formatting like code blocks.
+    """
     lines = raw_doc.strip().split('\n')
+    
     cleaned_lines = []
     for line in lines:
-        # Remove leading whitespace and potential '*'
-        clean_line = line.strip()
-        if clean_line.startswith('*'):
-            clean_line = clean_line[1:].strip()
-        cleaned_lines.append(clean_line)
-    return "\n".join(cleaned_lines)
+        stripped_line = re.sub(r'^\s*\*\s?', '', line)
+        cleaned_lines.append(stripped_line)
+
+    min_indent = float('inf')
+    for line in cleaned_lines:
+        if line.strip():
+            indent = len(line) - len(line.lstrip(' '))
+            min_indent = min(min_indent, indent)
+
+    if min_indent != float('inf'):
+        final_lines = []
+        for line in cleaned_lines:
+            if line.startswith(' ' * int(min_indent)):
+                final_lines.append(line[min_indent:])
+            else:
+                final_lines.append(line)
+        cleaned_lines = final_lines
+
+    return "\n".join(cleaned_lines).strip()
 
 def parse_haxe_file(file_path: Path) -> Optional[Dict[str, Any]]:
     """
