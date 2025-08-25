@@ -22,11 +22,12 @@ hlmod aims to be a truly generic, easy-to-use Hashlink modding framework that Ju
 - [x] Basic Python mods as modules, resolve dependencies, mod metadata
 - [x] JIT hooking to Python
 - [x] Basic casting of primitives from HL -> Python and Python -> HL
+- [ ] HNULL casting support
 - [ ] Obj wrappers, metaclasses and Python interfaces for HL objects
 - [ ] Hook a function by name
 - [ ] String utilities
 - [ ] Subclass an HL object from Python, or define a Python class and make it available as an HL Obj
-- [ ] Types and intellisense for HL Objs?
+  - [ ] Types and intellisense for HL Objs?
 - [ ] Common base lib mods for specific games:
   - [ ] Dead Cells
     - [ ] Bundled PAK loading
