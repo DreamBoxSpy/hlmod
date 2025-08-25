@@ -2,6 +2,7 @@
 Abstract base classes for accessing HL types in Python.
 """
 
+from enum import IntEnum
 from hlmod import HlPtr, register_hlobj, get_obj_field, set_obj_field # pyright: ignore[reportAttributeAccessIssue]
 from typing import Any, Callable, Type, TypeVar
 
@@ -38,3 +39,11 @@ class HlObject:
     
     def _hlmod_call_field(self, name: str, *args: Any) -> Any:
         return NotImplemented
+
+class HlEnum(IntEnum):
+    """Base class for HL enums that have no parameters."""
+    pass
+
+class HlEnumObject(HlObject):
+    """Base class for HL enum constructors that have parameters."""
+    pass
