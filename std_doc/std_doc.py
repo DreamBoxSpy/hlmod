@@ -5,6 +5,7 @@ import json
 import argparse
 from pathlib import Path
 from typing import Dict, Any, Optional
+import textwrap
 
 # Captures: 1=doc comment, 2=type name
 P_TYPE = re.compile(
@@ -35,31 +36,21 @@ P_FIELD = re.compile(
 def clean_doc_comment(raw_doc: str) -> str:
     """
     Cleans a raw doc comment string by removing comment markers and
-    dedenting the content to preserve internal formatting like code blocks.
+    normalizing inconsistent leading indentation from Haxe source files.
     """
     lines = raw_doc.strip().split('\n')
-    
-    cleaned_lines = []
-    for line in lines:
-        stripped_line = re.sub(r'^\s*\*\s?', '', line)
-        cleaned_lines.append(stripped_line)
-
-    min_indent = float('inf')
+    cleaned_lines = [re.sub(r'^\s*\*\s?', '', line) for line in lines]
+    normalized_lines = []
     for line in cleaned_lines:
-        if line.strip():
-            indent = len(line) - len(line.lstrip(' '))
-            min_indent = min(min_indent, indent)
+        if line.startswith('\t'):
+            normalized_lines.append(line[1:])
+        else:
+            normalized_lines.append(line)
 
-    if min_indent != float('inf'):
-        final_lines = []
-        for line in cleaned_lines:
-            if line.startswith(' ' * int(min_indent)):
-                final_lines.append(line[min_indent:])
-            else:
-                final_lines.append(line)
-        cleaned_lines = final_lines
+    full_block = "\n".join(normalized_lines)
+    dedented_block = textwrap.dedent(full_block)
 
-    return "\n".join(cleaned_lines).strip()
+    return dedented_block.strip()
 
 def parse_haxe_file(file_path: Path) -> Optional[Dict[str, Any]]:
     """
