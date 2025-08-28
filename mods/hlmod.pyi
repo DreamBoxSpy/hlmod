@@ -88,3 +88,15 @@ def set_fixed_prng(value: bool) -> None:
     When fixed, the seed is set to 4644546 and the PID is spoofed to 0.
     """
     ...
+    
+def register_hlobj(tindex: int, typ: type) -> None:
+    """
+    Registers a given type as the Python stub for a given tindex.
+    """
+    ...
+    
+def assert_code_sha(expected: str) -> None:
+    """
+    Asserts the bytecode SHA256, exiting if it mismatches. Useful for making sure the running bytecode matches what's expected.
+    """
+    ...

@@ -31,7 +31,7 @@ class PatchMe {
         return 1.0;
     }
 
-    static function thing(val: Float, val2: Null<Float>, msg: String, val3: TestClass) {
+    static function thing(val: Float, val2: Null<Float>, msg: String, val3: Null<TestClass>) {
         if (val == 2.0) {
             trace(msg);
             trace(val3.test);

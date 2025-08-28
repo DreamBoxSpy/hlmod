@@ -7,10 +7,15 @@ MOD_INFO = {
 }
 
 from modcore import hook
-from hlmod import get_obj_field, Hook
+from hlmod import get_obj_field, Hook, assert_code_sha
+from stubs import TestClass
+from typing import Optional
+
+def initialize():
+    assert_code_sha("c5b81c94db4a9de0e78e8779adabddf6b4246fd1fc938307306c27271e2df826")
 
 @hook(30)
 def thing(self: Hook, *args):
-    args = list(args)
-    args[1] = None
+    print("Hook!")
     self.call_original(*args)
+
