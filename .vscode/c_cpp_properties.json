@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${vcpkgRoot}/x64-windows/include",
-                "D:/vcpkg/installed/x64-windows/include/python3.12"
+                "D:/vcpkg/installed/x64-windows/include/python3.12",
+                "/usr/include/python3.13"
             ],
             "defines": [
                 "_DEBUG",
@@ -17,6 +18,17 @@
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "windows-msvc-x64"
+        },
+        {
+            "name": "linux64",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-gcc-x64"
         }
     ],
     "version": 4
