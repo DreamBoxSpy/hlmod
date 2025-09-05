@@ -2,6 +2,8 @@
 
 A generic modding framework for Hashlink, powered by Python. The spiritual successor to [pyhl](https://github.com/N3rdL0rd/crashlink/tree/main/pyhl).
 
+Join the [Hashlink Modding Community Discord](https://discord.gg/Es8ZpVkPey) for support!
+
 ## Introduction; Or, "Why another modding framework? Don't we already have DCCM?"
 
 Astute observation! Although DCCM is fantastic and very well-developed, it exists *specifically* for Dead Cells. Although, with some work, DCCM could be generalized to other applications and games (think: Wartales, Northgard, Dune: Spice Wars, etc.), it's still *just a Dead Cells modding tool*.
