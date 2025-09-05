@@ -9,7 +9,9 @@ wheels/
 # Virtual environments
 .venv
 
+# hlmod
 *.hl
-
 mods/stubs/
 deadcells.exe
+hdll/
+*.dat

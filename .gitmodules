@@ -4,3 +4,9 @@
 [submodule "std_doc/haxe"]
 	path = std_doc/haxe
 	url = https://github.com/HaxeFoundation/haxe
+[submodule "hlsteam"]
+	path = hlsteam
+	url = https://github.com/N3rdL0rd/hlsteam
+[submodule "Steamworks-SDK"]
+	path = Steamworks-SDK
+	url = https://github.com/ExperimentFailed/Steamworks-SDK
