@@ -2,7 +2,7 @@
 Internal, low-level module to interface more directly with hlmod. You should use `modcore` for 99% of cases, which provides much higher-level abstractions over this module!
 """
 
-from typing import Any, Protocol
+from typing import Any, Protocol, Tuple
 
 class HlPtr:
     """
@@ -98,5 +98,11 @@ def register_hlobj(tindex: int, typ: type) -> None:
 def assert_code_sha(expected: str) -> None:
     """
     Asserts the bytecode SHA256, exiting if it mismatches. Useful for making sure the running bytecode matches what's expected.
+    """
+    ...
+    
+def call(findex: int, args: Tuple[Any]) -> Any:
+    """
+    Calls a bytecode function by findex with the passed args. Returns the result.
     """
     ...

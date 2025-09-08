@@ -1,9 +1,19 @@
 import haxe.io.Bytes;
 
-class TestClass {
+class SuperTestClass {
+    public function do_a_thing() {
+        trace("Hello world! superclass");
+    }
+}
+
+class TestClass extends SuperTestClass {
     public var test: Int = 5;
 
     public function new() {}
+
+    public override function do_a_thing() {
+        trace("Hello world! subclass");
+    }
 }
 
 class PatchMe {

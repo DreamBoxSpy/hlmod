@@ -71,11 +71,9 @@ class HlObject:
         ptr_val = self._hlmod_ptr.ptr if self._hlmod_ptr else 0
         return f"<{self.__class__.__name__} at 0x{ptr_val:X}>"
 
-    def _hlmod_call_proto(self, name: str, *args: Any) -> Any:
-        return NotImplemented
-    
-    def _hlmod_call_field(self, name: str, *args: Any) -> Any:
-        return NotImplemented
+    def _hlmod_call_findex(self, findex: int, *args: Any) -> Any:
+        return hlmod.call(findex, (self, *args))
+        
 
 class HlEnum(IntEnum):
     """Base class for HL enums that have no parameters."""

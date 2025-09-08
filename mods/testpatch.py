@@ -18,13 +18,13 @@ def initialize():
     # assert_code_sha("52ac527751d7aa20d1be9024de88628f389336dbed3d915d82f55cabf58c3617")
     pass
 
-@hook(30)
+@hook(224)
 def thing(self: Hook, val: float, val2: Optional[float], msg: str, val3: Optional[TestClass]):
     print("Hook!")
     val = 2.0
     val2 = 1.0
     msg = "Hello, hlmod world!"
     assert val3 is not None
-    print(val3.test)
+    val3.do_a_thing()
     self.call_original(val, val2, msg, val3)
 
