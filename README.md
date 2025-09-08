@@ -30,11 +30,11 @@ hlmod aims to be a truly generic, easy-to-use Hashlink modding framework that Ju
 - [ ] String utilities
 - [ ] Subclass an HL object from Python, or define a Python class and make it available as an HL Obj
   - [ ] Types and intellisense for HL Objs?
-- [ ] Common base lib mods for specific games:
-  - [ ] Dead Cells
+- [ ] Common base lib mods for specific games and libs:
+  - [ ] Heaps.IO base
     - [ ] Bundled PAK loading
-    - [ ] Custom weapon subsystem
-  - [ ] More?
+    - [ ] Dead Cells
+      - [ ] Custom weapon subsystem
 
 ## Building
 
