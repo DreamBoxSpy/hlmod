@@ -25,9 +25,11 @@ hlmod aims to be a truly generic, easy-to-use Hashlink modding framework that Ju
 - [x] JIT hooking to Python
 - [x] Basic casting of primitives from HL -> Python and Python -> HL
 - [x] HNULL casting support
-- [ ] Obj wrappers, metaclasses and Python interfaces for HL objects
+- [x] Obj wrappers, metaclasses and Python interfaces for HL objects
+- [ ] Static Obj support and global instance support
+- [ ] HVIRTUAL, HABSTRACT, and other types
 - [ ] Hook a function by name
-- [ ] String utilities
+- [ ] Better HENUM support
 - [ ] Subclass an HL object from Python, or define a Python class and make it available as an HL Obj
   - [ ] Types and intellisense for HL Objs?
 - [ ] Common base lib mods for specific games and libs:
@@ -123,3 +125,10 @@ Then, binaries will be at `hlmod-hl/build/bin`, as normal.
 - Modify the JIT compiler as LITTLE as possible. The more assembly we generate, the more unstable the VM becomes. Keep your ASM short, and write trampolines to C instead of full routines.
 - The end user shouldn't have to memorize internal HL incantations to be able to write a basic mod. When in doubt, cast to and from a similar builtin Python class rather than write a full wrapper that may have incompatibilities with Python's `std`.
 - Keep low-level APIs on the C side, then wrap them in nice Pythonic functions in `modcore`. For example, `hlmod.register_hook` is wrapped by a Pythonic decorator in `modcore.hook`.
+
+## What's Changed?
+
+In the HL VM, a few fixes and tweaks have been made or merged from upstream PRs:
+
+- HaxeFoundation/hashlink#795 (Add newline to `--version` print)
+- HaxeFoundation/hashlink#482 (Fix MinGW build)
