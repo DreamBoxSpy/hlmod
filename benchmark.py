@@ -3,16 +3,12 @@ import re
 import statistics
 import sys
 
-TRIALS = 10
+TRIALS = 100
 
 COMMAND = ['./hlmod-hl/build/bin/hl', 'deadcells.exe']
 
 
 def run_benchmark(command, num_trials):
-    """
-    Runs the specified command for a number of trials, captures the output,
-    and calculates the average code read time.
-    """
     read_times = []
     
     time_regex = re.compile(r"Code read took ([\d\.]+) μs\.")
@@ -63,6 +59,8 @@ def run_benchmark(command, num_trials):
     
     print(f"Successfully recorded {successful_trials}/{num_trials} trials.")
     print(f"\nAverage code read time: {average_time:.2f} μs")
+    print(f"Stddev: {statistics.stdev(read_times)} μs")
+    print(f"Median: {statistics.median(read_times)} μs")
 
 if __name__ == "__main__":
     run_benchmark(COMMAND, TRIALS)
