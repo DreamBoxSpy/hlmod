@@ -15,3 +15,7 @@ mods/stubs/
 deadcells.exe
 hdll/
 *.dat
+res.pak
+steam_appid.txt
+save/
+logs/
