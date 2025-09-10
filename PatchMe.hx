@@ -1,6 +1,8 @@
 import haxe.io.Bytes;
 
 class SuperTestClass {
+    public static var STATIC_VAL: Int = 8;
+
     public function do_a_thing() {
         trace("Hello world! superclass");
     }
@@ -22,6 +24,7 @@ class PatchMe {
         var val2 = 2.0;
         thing(val, val2, "Unpatched message!", new TestClass());
         array_test();
+        trace(SuperTestClass.STATIC_VAL);
     }
 
     static function array_test() {

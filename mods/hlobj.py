@@ -36,7 +36,7 @@ class HlObject:
     def __init__(self, ptr: 'HlPtr') -> None:
         """
         Initializes the Python stub with a pointer to the live Haxe object.
-        This is typically called by the hlmod framework, not by the user.
+        This is typically called by hlmod itself, not by the user - but if you feel like it, you can call this yourself.
         """
         object.__setattr__(self, "_hlmod_ptr", ptr)
 
@@ -69,7 +69,7 @@ class HlObject:
             
     def __repr__(self) -> str:
         ptr_val = self._hlmod_ptr.ptr if self._hlmod_ptr else 0
-        return f"<{self.__class__.__name__} at 0x{ptr_val:X}>"
+        return f"<{self.__class__.__name__} pointing to 0x{ptr_val:X}>"
 
     def _hlmod_call_findex(self, findex: int, *args: Any) -> Any:
         return hlmod.call(findex, (self, *args))

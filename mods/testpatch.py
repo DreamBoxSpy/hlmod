@@ -3,12 +3,14 @@ MOD_INFO = {
     "name": "Test PatchMe",
     "description": "",
     "version": "0.0.1",
-    "dependencies": ["modcore"]
+    "dependencies": ["modcore"],
+    "enabled": False
 }
 
 from modcore import hook
-from hlmod import get_obj_field, Hook, assert_code_sha
+from hlmod import get_obj_field, Hook, assert_code_sha, get_global
 from typing import Optional
+from stubs import TestClass, S_SuperTestClass
 
 def initialize():
     # Haxe 4.3.6 Windows
@@ -17,13 +19,17 @@ def initialize():
     # assert_code_sha("52ac527751d7aa20d1be9024de88628f389336dbed3d915d82f55cabf58c3617")
     pass
 
-# @hook(224)
-# def thing(self: Hook, val: float, val2: Optional[float], msg: str, val3: Optional[TestClass]):
-#     print("Hook!")
-#     val = 2.0
-#     val2 = 1.0
-#     msg = "Hello, hlmod world!"
-#     assert val3 is not None
-#     val3.do_a_thing()
-#     self.call_original(val, val2, msg, val3)
+@hook(224)
+def thing(self: Hook, val: float, val2: Optional[float], msg: str, val3: Optional[TestClass]):
+    print("Hook!")
+    val = 2.0
+    val2 = 1.0
+    msg = "Hello, hlmod world!"
+    assert val3 is not None
+    val3.do_a_thing()
+    print(val3.test)
+    s_supertestclass: S_SuperTestClass = get_global(23)
+    print(s_supertestclass)
+    print(s_supertestclass.STATIC_VAL)
+    self.call_original(val, val2, msg, val3)
 

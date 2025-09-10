@@ -2,7 +2,7 @@
 Internal, low-level module to interface more directly with hlmod. You should use `modcore` for 99% of cases, which provides much higher-level abstractions over this module!
 """
 
-from typing import Any, Protocol, Tuple
+from typing import Any, Optional, Protocol, Tuple
 
 class HlPtr:
     """
@@ -104,5 +104,17 @@ def assert_code_sha(expected: str) -> None:
 def call(findex: int, args: Tuple[Any]) -> Any:
     """
     Calls a bytecode function by findex with the passed args. Returns the result.
+    """
+    ...
+
+def get_global(tindex: int) -> Optional[Any]:
+    """
+    Gets the global instance of a type by index. Useful for static types.
+    """
+    ...
+
+def dump_stack() -> None:
+    """
+    Prints the current HL stack to the console. Requires an active HL thread, don't call during init!
     """
     ...
