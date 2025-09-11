@@ -118,3 +118,5 @@ def dump_stack() -> None:
     Prints the current HL stack to the console. Requires an active HL thread, don't call during init!
     """
     ...
+
+version: str
