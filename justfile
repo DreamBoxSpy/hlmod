@@ -43,3 +43,11 @@ hlsteam:
     cd hlsteam && make
     cp hlsteam/steam.hdll hlmod-hl/build/bin/steam.hdll
     cp ./Steamworks-SDK/redistributable_bin/linux64/libsteam_api.so hlmod-hl/build/bin/libsteam_api.so
+
+pull:
+    cd hlmod-hl && proxychains git pull
+    proxychains git pull
+
+push:
+    cd hlmod-hl && proxychains git push
+    proxychains git push
