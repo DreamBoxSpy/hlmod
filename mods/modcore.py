@@ -15,7 +15,7 @@ MOD_INFO = {
     "dependencies": []
 }
 
-def hook(findex: int|List[int]):
+def hook(fidx_or_name: str|int|List[int]):
     """
     A decorator that registers the decorated function as a hook for a given
     Hashlink function index (findex).
@@ -28,14 +28,17 @@ def hook(findex: int|List[int]):
         hook.call_original(*args)
     ```
     """
-    if not isinstance(findex, (int, list)):
+    if not isinstance(fidx_or_name, (int, list, str)):
         raise TypeError("The @hook decorator requires an integer findex or a list of integer findexes.")
 
     def decorator(func):
-        if isinstance(findex, int):
-            hlmod.register_hook(findex, func) # pyright: ignore[reportAttributeAccessIssue]
+        if isinstance(fidx_or_name, int):
+            hlmod.register_hook(fidx_or_name, func) # pyright: ignore[reportAttributeAccessIssue]
+        elif isinstance(fidx_or_name, str):
+            fidx = hlmod.findex_for_name(fidx_or_name)
+            hlmod.register_hook(fidx, func)
         else:
-            for fidx in findex:
+            for fidx in fidx_or_name:
                 hlmod.register_hook(fidx, func) # pyright: ignore[reportAttributeAccessIssue]
         return func
     

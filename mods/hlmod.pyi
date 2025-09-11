@@ -119,4 +119,10 @@ def dump_stack() -> None:
     """
     ...
 
+def findex_for_name(name: str) -> int:
+    """
+    Gets the corresponding findex for a given function's name. Most likely, you want to just use `modcore.hook()` with a string argument and hlmod will resolve it for you. You're welcome!
+    """
+    ...
+
 version: str
