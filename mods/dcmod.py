@@ -44,7 +44,7 @@ def set_build_text(text: str) -> None:
     global BUILD_TEXT
     BUILD_TEXT = text
 
-@hook(5937)
+@hook("ui.$Console.__constructor__")
 def hook_console_ctor(self: Hook, this: Console):
     global CONSOLE
     CONSOLE = this
@@ -52,12 +52,12 @@ def hook_console_ctor(self: Hook, this: Console):
     this.activateDebug()
     log("Console initialized!")
     
-@hook(5904)
+@hook("ui.Console.log")
 def hook_console_log(self: Hook, this: Console, logText: str, color: Optional[int]):
     print(f"[dcmod] [Console] {logText}")
     h2dConsole.log(this, logText, color)
 
-@hook(6469)
+@hook("pr.TitleScreen.setMiscTexts")
 def hook_titlescreen_setMiscTexts(self: Hook, this: TitleScreen):
     self.call_original(this)
     if CUSTOM_BUILD_TEXT:
@@ -69,7 +69,7 @@ def hook_pakutils_getPakStampHash(self: Hook) -> str:
         return self.call_original()
     return "0022228129b0973a12d14548434b3741debcd3a38734f1e0dd1f3b3f7acdd91c" # for commit 50ed44f, latest v35. in case you fuck something up version-wise ;)
 
-@hook(35983)
+@hook("tool.log.$LogUtils.log")
 def hook_logutils_log(self: Hook, text: str, severity: Any, pos: Any):
     if CONSOLE:
         CONSOLE.log(text, 0xb8fcf7)
