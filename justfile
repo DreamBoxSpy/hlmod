@@ -51,8 +51,11 @@ hlsteam-win:
     #!cmd.exe /C
     @just hlsteam-common
     set HASHLINK_SRC=..\hlmod-hl & "{{MSVC_VARS_SCRIPT}}" x64 & cd hlsteam & msbuild hlsteam.vcxproj /t:Clean & msbuild hlsteam.vcxproj
-    cp x64\Debug\steam.hdll ..\hdll\steam.hdll
-    cd .. & cp Steamworks-SDK\redistributable_bin\win64\steam_api64.dll hlmod\build\bin\steam_api64.dll
+    @just hlsteam-win-copy
+
+hlsteam-win-copy:
+    cp hlsteam/x64/Debug/steam.hdll hdll/steam.hdll
+    cp Steamworks-SDK/redistributable_bin/win64/steam_api64.dll hlmod-hl/build/bin/
 
 hlchroma:
     #!cmd.exe /C
