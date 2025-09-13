@@ -27,7 +27,7 @@ run-win:
     #!cmd.exe /C
     hlmod-hl\build\bin\hl.exe PatchMe.hl
 
-hlsteam:
+hlsteam-common:
     mkdir -p hlsteam/native/include/steam
     mkdir -p hlsteam/native/lib/win32
     mkdir -p hlsteam/native/lib/osx64
@@ -40,9 +40,19 @@ hlsteam:
     cp ./Steamworks-SDK/redistributable_bin/linux32/libsteam_api.so hlsteam/native/lib/linux32 > /dev/null
     cp ./Steamworks-SDK/redistributable_bin/linux64/libsteam_api.so hlsteam/native/lib/linux64 > /dev/null
     cp ./hlmod-hl/src/hl.h hlsteam/native/include > /dev/null
+
+hlsteam:
+    @just hlsteam-common
     cd hlsteam && make
     cp hlsteam/steam.hdll hlmod-hl/build/bin/steam.hdll
     cp ./Steamworks-SDK/redistributable_bin/linux64/libsteam_api.so hlmod-hl/build/bin/libsteam_api.so
+
+hlsteam-win:
+    #!cmd.exe /C
+    @just hlsteam-common
+    set HASHLINK_SRC=..\hlmod-hl & "{{MSVC_VARS_SCRIPT}}" x64 & cd hlsteam & msbuild hlsteam.vcxproj /t:Clean & msbuild hlsteam.vcxproj
+    cp x64\Debug\steam.hdll ..\hdll\steam.hdll
+    cd .. & cp Steamworks-SDK\redistributable_bin\win64\steam_api64.dll hlmod\build\bin\steam_api64.dll
 
 hlchroma:
     #!cmd.exe /C
@@ -50,6 +60,13 @@ hlchroma:
     rm -Rf hlchroma/build
     cd hlchroma && mkdir build && cd build && cmake -G "Ninja" .. && cmake --build . --parallel && cd ..\..\
     cp hlchroma\build\chroma.hdll hdll\
+
+hldiscord:
+    #!cmd.exe /C
+    rm -Rf hldiscord/build
+    cd hldiscord && mkdir build && cd build && cmake -G "Ninja" .. && cmake --build . --parallel && cd ..\..\
+    cp hldiscord\build\discord.hdll hdll\
+
 
 pull:
     cd hlmod-hl && proxychains git pull

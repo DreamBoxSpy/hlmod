@@ -13,3 +13,6 @@
 [submodule "hlchroma"]
 	path = hlchroma
 	url = https://github.com/N3rdL0rd/hlchroma.git
+[submodule "hldiscord"]
+	path = hldiscord
+	url = https://github.com/N3rdL0rd/hldiscord
