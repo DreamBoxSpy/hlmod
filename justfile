@@ -44,6 +44,13 @@ hlsteam:
     cp hlsteam/steam.hdll hlmod-hl/build/bin/steam.hdll
     cp ./Steamworks-SDK/redistributable_bin/linux64/libsteam_api.so hlmod-hl/build/bin/libsteam_api.so
 
+hlchroma:
+    #!cmd.exe /C
+    # windows only!
+    rm -Rf hlchroma/build
+    cd hlchroma && mkdir build && cd build && cmake -G "Ninja" .. && cmake --build . --parallel && cd ..\..\
+    cp hlchroma\build\chroma.hdll hdll\
+
 pull:
     cd hlmod-hl && proxychains git pull
     proxychains git pull

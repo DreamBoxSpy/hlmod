@@ -20,3 +20,4 @@ steam_appid.txt
 save/
 logs/
 files.txt
+*.dll

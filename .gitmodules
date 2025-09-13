@@ -10,3 +10,6 @@
 [submodule "Steamworks-SDK"]
 	path = Steamworks-SDK
 	url = https://github.com/ExperimentFailed/Steamworks-SDK
+[submodule "hlchroma"]
+	path = hlchroma
+	url = https://github.com/N3rdL0rd/hlchroma.git
