@@ -1,0 +1,63 @@
+name: Nightly Build
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest] 
+        build_type: [Debug, Release]
+        include:
+          - os: ubuntu-latest
+            compiler: gcc
+            cc: gcc
+            cxx: g++
+          - os: ubuntu-latest
+            compiler: clang
+            cc: clang
+            cxx: clang++
+          # TODO: windows
+        #   - os: windows-latest
+        #     compiler: msvc
+        #   - os: windows-latest
+        #     compiler: mingw
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: 'recursive' # Good practice, just in case
+
+    - name: Install Linux dependencies
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends \
+          libpng-dev libturbojpeg-dev libvorbis-dev libopenal-dev \
+          libsdl2-dev libglu1-mesa-dev libmbedtls-dev libuv1-dev \
+          libsqlite3-dev ninja-build
+
+    - name: Configure CMake on Linux
+      if: runner.os == 'Linux'
+      env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+      run: |
+          cmake -S hlmod-hl -B hlmod-hl/build -G "Ninja" \
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+
+    - name: Build with CMake
+      run: cmake --build hlmod-hl/build --parallel
+
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+          name: hlmod-hl-${{ runner.os }}-${{ matrix.compiler }}-${{ matrix.build_type }}
+          path: hlmod-hl/build/bin/
