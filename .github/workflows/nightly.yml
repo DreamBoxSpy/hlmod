@@ -33,7 +33,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        submodules: 'recursive' # Good practice, just in case
+        submodules: 'recursive'
+
+    - uses: krdlab/setup-haxe@v1
+      with:
+        haxe-version: latest
+
+    - name: Install HL haxelib
+      run: haxelib install hashlink
 
     - name: Install Linux dependencies
       if: runner.os == 'Linux'
