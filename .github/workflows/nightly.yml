@@ -186,7 +186,6 @@ jobs:
 
     - name: Prepare hlsteam (Windows)
       if: runner.os == 'Windows'
-      shell: msys2 {0}
       run: |
           mkdir -p hlsteam/native/include/steam hlsteam/native/lib/win64
           cp ./Steamworks-SDK/public/steam/*.h hlsteam/native/include/steam/
