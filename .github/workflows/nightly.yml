@@ -184,21 +184,35 @@ jobs:
           cp ./Steamworks-SDK/redistributable_bin/linux64/libsteam_api.so ./hlmod-hl/build/bin/
           chmod 775 ./hlmod-hl/build/bin/libsteam_api.so
 
-    - name: Build hlsteam (Windows/MinGW)
-      if: runner.os == 'Windows' && matrix.compiler == 'mingw'
+    - name: Prepare hlsteam (Windows)
+      if: runner.os == 'Windows'
       shell: msys2 {0}
       run: |
-          # The GNU Makefile works in MSYS2, but we need to adjust for Windows DLLs
           mkdir -p hlsteam/native/include/steam hlsteam/native/lib/win64
           cp ./Steamworks-SDK/public/steam/*.h hlsteam/native/include/steam/
           cp ./Steamworks-SDK/redistributable_bin/win64/steam_api64.lib hlsteam/native/lib/win64/
           cp ./hlmod-hl/src/hl.h hlsteam/native/include/
+
+    - name: Build hlsteam (Windows/MinGW)
+      if: runner.os == 'Windows' && matrix.compiler == 'mingw'
+      shell: msys2 {0}
+      run: |
           cd hlsteam
           make CXXFLAGS="-Inative/include" LFLAGS="-L../hlmod-hl/build/bin -Lnative/lib/win64"
           cd ..
-          cp ./hlsteam/steam.dll ./hlmod-hl/build/bin/
-          cp ./Steamworks-SDK/redistributable_bin/win64/steam_api64.dll ./hlmod-hl/build/bin/
+          cp ./hlsteam/steam.hdll ./hlmod-hl/build/bin/steam.hdll
+          cp ./Steamworks-SDK/redistributable_bin/win64/steam_api64.dll ./hlmod-hl/build/bin/steam_api64.dll
 
+
+    - name: Build hlsteam (Windows/MSVC)
+      if: runner.os == 'Windows' && matrix.compiler == 'msvg'
+      run: |
+          set HASHLINK_SRC=..\hlmod-hl
+          cd hlsteam
+          msbuild hlsteam.vcxproj
+          cd ..
+          cp hlsteam/x64/Debug/steam.hdll hlmod-hl/build/bin/steam.hdll
+          cp Steamworks-SDK/redistributable_bin/win64/steam_api64.dll hlmod-hl/build/bin/steam_api64.dll
 
     - name: Package for Distribution (Linux)
       if: runner.os == 'Linux'
