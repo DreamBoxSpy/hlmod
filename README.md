@@ -40,6 +40,9 @@ hlmod aims to be a truly generic, easy-to-use Hashlink modding framework that Ju
 
 ## Building
 
+> [!NOTE]
+> You can download the latest nightlies for Linux (and hopefully soon, Windows) from [the nightly.link](https://nightly.link/N3rdL0rd/hlmod/workflows/nightly/main).
+
 You'll need to first satisfy all the build requirements in HL's README:
 
 ### HL Dependencies on Linux/OSX
