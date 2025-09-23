@@ -18,21 +18,25 @@ jobs:
             compiler: gcc
             cc: gcc
             cxx: g++
+            python: '3.13'
           - os: ubuntu-latest
             build_type: Release
             compiler: gcc
             cc: gcc
             cxx: g++
+            python: '3.13'
           # - os: ubuntu-latest
           #   build_type: Debug
           #   compiler: clang
           #   cc: clang
           #   cxx: clang++
+          #   python: 3.13
           # - os: ubuntu-latest
           #   build_type: Release
           #   compiler: clang
           #   cc: clang
           #   cxx: clang++
+          #   python: 3.13
 
     steps:
     - name: Checkout repository
@@ -40,10 +44,10 @@ jobs:
       with:
         submodules: 'recursive'
 
-    - name: Set up Python 3.13
+    - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.13'
+        python-version: ${{ matrix.python }}
 
     - uses: krdlab/setup-haxe@v1
       with:
@@ -138,5 +142,5 @@ jobs:
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4
       with:
-          name: hlmod-hl-${{ runner.os }}-${{ matrix.compiler }}-${{ matrix.build_type }}
+          name: hlmod-hl-nightly-python${{ matrix.python }}-${{ runner.os }}-${{ matrix.compiler }}-${{ matrix.build_type }}
           path: hlmod-hl/build/bin/
