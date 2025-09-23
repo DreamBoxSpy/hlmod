@@ -103,7 +103,6 @@ jobs:
       shell: pwsh
       run: |
         $HLMOD_INCLUDE_DIR = "hlmod-hl/include"
-        mkdir -p $HLMOD_INCLUDE_DIR
         
         Invoke-WebRequest -Uri "https://github.com/libsdl-org/SDL/releases/download/release-2.30.12/SDL2-devel-2.30.12-VC.zip" -OutFile "SDL2-devel.zip"
         Expand-Archive -Path "SDL2-devel.zip" -DestinationPath "$HLMOD_INCLUDE_DIR/sdl_temp"
