@@ -94,6 +94,8 @@ jobs:
       run: |
         ARTIFACT_DIR=hlmod-hl/build/bin
 
+        cp -r mods/ $ARTIFACT_DIR/mods/
+
         LIBPYTHON_PATH=$(ldd $ARTIFACT_DIR/hl | grep libpython | awk '{print $3}')
         if [ ! -f "$LIBPYTHON_PATH" ]; then
             echo "ERROR: Could not find libpython path from ldd output."
