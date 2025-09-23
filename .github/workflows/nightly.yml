@@ -117,7 +117,7 @@ jobs:
       if: runner.os == 'Windows' && matrix.compiler == 'mingw'
       shell: msys2 {0}
       run: |
-          cmake -S hlmod-hl -B hlmod-hl/build -G "Ninja" `
+          cmake -S hlmod-hl -B hlmod-hl/build -G "Ninja" \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
 
     - name: Build with CMake
