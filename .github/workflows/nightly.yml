@@ -87,6 +87,35 @@ jobs:
           cp ./hlsteam/steam.hdll ./hlmod-hl/build/bin/
           patchelf --set-rpath '$ORIGIN' ./hlmod-hl/build/bin/steam.hdll
           cp ./Steamworks-SDK/redistributable_bin/linux64/libsteam_api.so ./hlmod-hl/build/bin/
+          chmod 775 ./hlmod-hl/build/bin/libsteam_api.so
+
+    - name: Package for Distribution (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        ARTIFACT_DIR=hlmod-hl/build/bin
+
+        LIBPYTHON_PATH=$(ldd $ARTIFACT_DIR/hl | grep libpython | awk '{print $3}')
+        if [ ! -f "$LIBPYTHON_PATH" ]; then
+            echo "ERROR: Could not find libpython path from ldd output."
+            exit 1
+        fi
+        echo "Found libpython at: $LIBPYTHON_PATH"
+
+        cp "$LIBPYTHON_PATH" "$ARTIFACT_DIR/"
+        echo "Copied libpython to artifact directory."
+
+        STDLIB_PATH=$(python3 -c 'import sysconfig; print(sysconfig.get_path("stdlib"))')
+        if [ ! -d "$STDLIB_PATH" ]; then
+            echo "ERROR: Could not find Python standard library path."
+            exit 1
+        fi
+        echo "Found standard library at: $STDLIB_PATH"
+
+        cp -r "$STDLIB_PATH" "$ARTIFACT_DIR/"
+        echo "Copied standard library to artifact directory."
+
+        patchelf --set-rpath '$ORIGIN' $ARTIFACT_DIR/hl
+        echo "Set RPATH on 'hl' executable to '$ORIGIN'."
 
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4
