@@ -13,34 +13,34 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # - os: ubuntu-latest
-          #   build_type: Debug
-          #   compiler: gcc
-          #   cc: gcc
-          #   cxx: g++
-          #   python: '3.13'
+          - os: ubuntu-latest
+            build_type: Debug
+            compiler: gcc
+            cc: gcc
+            cxx: g++
+            python: '3.13'
+          - os: ubuntu-latest
+            build_type: Release
+            compiler: gcc
+            cc: gcc
+            cxx: g++
+            python: '3.13'
+          - os: ubuntu-latest
+            build_type: Debug
+            compiler: clang
+            cc: clang
+            cxx: clang++
+            python: 3.13
           # - os: ubuntu-latest
           #   build_type: Release
-          #   compiler: gcc
-          #   cc: gcc
-          #   cxx: g++
-          #   python: '3.13'
-          # - os: ubuntu-latest
-          #   build_type: Debug
           #   compiler: clang
           #   cc: clang
           #   cxx: clang++
           #   python: 3.13
-          # - os: ubuntu-latest
-          #   build_type: Release
-          #   compiler: clang
-          #   cc: clang
-          #   cxx: clang++
-          #   python: 3.13
-          # - os: windows-latest
-          #   build_type: Debug
-          #   compiler: msvc
-          #   python: '3.13'
+          - os: windows-latest
+            build_type: RelWithDebInfo
+            compiler: msvc
+            python: '3.13'
           - os: windows-latest
             build_type: Release
             compiler: msvc
@@ -217,6 +217,14 @@ jobs:
           cp hlsteam/x64/Debug/steam.hdll hlmod-hl/build/bin/steam.hdll
           cp Steamworks-SDK/redistributable_bin/win64/steam_api64.dll hlmod-hl/build/bin/steam_api64.dll
 
+    - name: Clean MSVC intermediate files
+      if: runner.os == 'Windows' && matrix.compiler == 'msvc' && matrix.build_type != 'RelWithDebInfo'
+      shell: pwsh
+      run: |
+        Remove-Item -Path "hlmod-hl/build/bin/*.exp" -ErrorAction SilentlyContinue
+        Remove-Item -Path "hlmod-hl/build/bin/*.lib" -ErrorAction SilentlyContinue
+        Write-Host "Cleaned .exp and .lib files for MSVC ${{ matrix.build_type }} build."
+
     - name: Package for Distribution (Linux)
       if: runner.os == 'Linux'
       run: |
@@ -274,6 +282,16 @@ jobs:
         $STDLIB_PATH = python -c 'import sysconfig; print(sysconfig.get_path("stdlib"))'
         Copy-Item -Path $STDLIB_PATH -Destination $ARTIFACT_DIR -Recurse
         Write-Host "Copied Python standard library to artifact directory."
+
+    - name: Exclude test directory from artifact
+      shell: bash
+      run: |
+        if [ -d "hlmod-hl/build/bin/test" ]; then
+          echo "Removing test directory from artifact..."
+          rm -rf "hlmod-hl/build/bin/test"
+        else
+          echo "Test directory not found in artifact, skipping."
+        fi
 
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4
