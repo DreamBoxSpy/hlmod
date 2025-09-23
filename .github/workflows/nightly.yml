@@ -186,6 +186,7 @@ jobs:
 
     - name: Prepare hlsteam (Windows)
       if: runner.os == 'Windows'
+      shell: sh
       run: |
           mkdir -p hlsteam/native/include/steam hlsteam/native/lib/win64
           cp ./Steamworks-SDK/public/steam/*.h hlsteam/native/include/steam/
@@ -202,14 +203,17 @@ jobs:
           cp ./hlsteam/steam.hdll ./hlmod-hl/build/bin/steam.hdll
           cp ./Steamworks-SDK/redistributable_bin/win64/steam_api64.dll ./hlmod-hl/build/bin/steam_api64.dll
 
-
     - name: Build hlsteam (Windows/MSVC)
-      if: runner.os == 'Windows' && matrix.compiler == 'msvg'
+      if: runner.os == 'Windows' && matrix.compiler == 'msvc'
       run: |
           set HASHLINK_SRC=..\hlmod-hl
           cd hlsteam
           msbuild hlsteam.vcxproj
           cd ..
+
+    - name: Copy hlsteam (Windows/MSVC)
+      if: runner.os == 'Windows' && matrix.compiler == 'msvc'
+      run: |
           cp hlsteam/x64/Debug/steam.hdll hlmod-hl/build/bin/steam.hdll
           cp Steamworks-SDK/redistributable_bin/win64/steam_api64.dll hlmod-hl/build/bin/steam_api64.dll
 
