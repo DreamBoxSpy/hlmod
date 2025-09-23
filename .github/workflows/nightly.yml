@@ -145,8 +145,13 @@ jobs:
           cmake -S hlmod-hl -B hlmod-hl/build -G "Ninja" \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
 
-    - name: Build with CMake
+    - name: Build with CMake (Linux)
+      if: runner.os == 'Linux'
       run: cmake --build hlmod-hl/build --parallel
+
+    - name: Build with CMake (Windows)
+      if: runner.os == 'Windows'
+      run: cmake --build hlmod-hl/build # no --parallel on windows because it's stupid
 
     - name: Build hlsteam (Linux)
       if: runner.os == 'Linux'
