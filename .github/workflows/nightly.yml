@@ -81,9 +81,11 @@ jobs:
           cp ./Steamworks-SDK/redistributable_bin/linux32/libsteam_api.so hlsteam/native/lib/linux32 > /dev/null
           cp ./Steamworks-SDK/redistributable_bin/linux64/libsteam_api.so hlsteam/native/lib/linux64 > /dev/null
           cp ./hlmod-hl/src/hl.h hlsteam/native/include > /dev/null
-          cd hlsteam && make
-          cp hlsteam/steam.hdll hlmod-hl/build/bin/steam.hdll
-          patchelf --set-rpath '$ORIGIN' hlmod-hl/build/bin/steam.hdll
+          cd hlsteam
+          make CFLAGS="-I../hlmod-hl/include/hashlink" LFLAGS="-L../hlmod-hl/build/bin"
+          cp steam.hdll ../hlmod-hl/build/bin/steam.hdll
+          patchelf --set-rpath '$ORIGIN' ../hlmod-hl/build/bin/steam.hdll
+          cd ..
           cp ./Steamworks-SDK/redistributable_bin/linux64/libsteam_api.so hlmod-hl/build/bin/libsteam_api.so
 
     - name: Upload Build Artifacts
