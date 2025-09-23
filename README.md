@@ -1,5 +1,7 @@
 # hlmod
 
+[![Nightly Build](https://github.com/N3rdL0rd/hlmod/actions/workflows/nightly.yml/badge.svg)](https://nightly.link/N3rdL0rd/hlmod/workflows/nightly/main)
+
 A generic modding framework for Hashlink, powered by Python. The spiritual successor to [pyhl](https://github.com/N3rdL0rd/crashlink/tree/main/pyhl).
 
 Join the [Hashlink Modding Community Discord](https://discord.gg/Es8ZpVkPey) for support!
