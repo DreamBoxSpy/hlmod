@@ -98,6 +98,26 @@ jobs:
           mingw-w64-x86_64-SDL2
           mingw-w64-x86_64-openal
 
+    - name: Prepare Hashlink third-party includes (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        $HLMOD_INCLUDE_DIR = "hlmod-hl/include"
+        mkdir -p $HLMOD_INCLUDE_DIR
+        
+        Invoke-WebRequest -Uri "https://github.com/libsdl-org/SDL/releases/download/release-2.30.12/SDL2-devel-2.30.12-VC.zip" -OutFile "SDL2-devel.zip"
+        Expand-Archive -Path "SDL2-devel.zip" -DestinationPath "$HLMOD_INCLUDE_DIR/sdl_temp"
+        Move-Item -Path "$HLMOD_INCLUDE_DIR/sdl_temp/SDL2-devel-2.30.12/*" -Destination "$HLMOD_INCLUDE_DIR/sdl"
+        Remove-Item -Recurse "$HLMOD_INCLUDE_DIR/sdl_temp"
+        Write-Host "Extracted SDL2 to $HLMOD_INCLUDE_DIR/sdl"
+
+        Invoke-WebRequest -Uri "https://github.com/kcat/openal-soft/releases/download/1.23.1/openal-soft-1.23.1-bin.zip" -OutFile "openal-soft.zip"
+        Expand-Archive -Path "openal-soft.zip" -DestinationPath "$HLMOD_INCLUDE_DIR/openal_temp"
+        Move-Item -Path "$HLMOD_INCLUDE_DIR/openal_temp/openal-soft-1.23.1-bin/*" -Destination "$HLMOD_INCLUDE_DIR/openal"
+        Remove-Item -Recurse "$HLMOD_INCLUDE_DIR/openal_temp"
+        Write-Host "Extracted OpenAL-Soft to $HLMOD_INCLUDE_DIR/openal"
+
+
     - name: Configure CMake (Linux)
       if: runner.os == 'Linux'
       env:
