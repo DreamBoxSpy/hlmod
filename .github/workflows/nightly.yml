@@ -150,9 +150,14 @@ jobs:
       if: runner.os == 'Linux'
       run: cmake --build hlmod-hl/build --parallel
 
-    - name: Build with CMake (Windows)
-      if: runner.os == 'Windows'
-      run: cmake --build hlmod-hl/build -v # no --parallel on windows because it's stupid
+    - name: Build with CMake (Windows/MSVC)
+      if: runner.os == 'Windows' && matrix.compiler == 'msvc'
+      run: cmake --build hlmod-hl/build --parallel -v
+
+    - name: Build with CMake (Widnows/MinGW)
+      if: runner.os == 'Windows' && matrix.compiler == 'mingw'
+      shell: msys2 {0}
+      run: cmake --build hlmod-hl/build --parallel
 
     - name: Build hlsteam (Linux)
       if: runner.os == 'Linux'
