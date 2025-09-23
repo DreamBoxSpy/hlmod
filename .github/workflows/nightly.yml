@@ -12,22 +12,27 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest] 
-        build_type: [Debug, Release]
         include:
           - os: ubuntu-latest
+            build_type: Debug
             compiler: gcc
             cc: gcc
             cxx: g++
           - os: ubuntu-latest
-            compiler: clang
-            cc: clang
-            cxx: clang++
-          # TODO: windows
-        #   - os: windows-latest
-        #     compiler: msvc
-        #   - os: windows-latest
-        #     compiler: mingw
+            build_type: Release
+            compiler: gcc
+            cc: gcc
+            cxx: g++
+          # - os: ubuntu-latest
+          #   build_type: Debug
+          #   compiler: clang
+          #   cc: clang
+          #   cxx: clang++
+          # - os: ubuntu-latest
+          #   build_type: Release
+          #   compiler: clang
+          #   cc: clang
+          #   cxx: clang++
 
     steps:
     - name: Checkout repository
@@ -49,7 +54,7 @@ jobs:
         sudo apt-get install -y --no-install-recommends \
           libpng-dev libturbojpeg-dev libvorbis-dev libopenal-dev \
           libsdl2-dev libglu1-mesa-dev libmbedtls-dev libuv1-dev \
-          libsqlite3-dev ninja-build
+          libsqlite3-dev ninja-build patchelf
 
     - name: Configure CMake (Linux)
       if: runner.os == 'Linux'
@@ -62,7 +67,7 @@ jobs:
 
     - name: Build with CMake
       run: cmake --build hlmod-hl/build --parallel
-    
+
     - name: Build hlsteam (Linux)
       if: runner.os == 'Linux'
       env:
@@ -70,23 +75,18 @@ jobs:
           CXX: ${{ matrix.cxx }}
       run: |
           mkdir -p hlsteam/native/include/steam
-          mkdir -p hlsteam/native/lib/win32
-          mkdir -p hlsteam/native/lib/osx64
-          mkdir -p hlsteam/native/lib/linux32
           mkdir -p hlsteam/native/lib/linux64
-          cp ./Steamworks-SDK/public/steam/*.h hlsteam/native/include/steam
-          cp ./Steamworks-SDK/redistributable_bin/steam_api.dll hlsteam/native/lib/win32 > /dev/null
-          cp ./Steamworks-SDK/redistributable_bin/steam_api.lib hlsteam/native/lib/win32 > /dev/null
-          cp ./Steamworks-SDK/redistributable_bin/osx/libsteam_api.dylib hlsteam/native/lib/osx64 > /dev/null
-          cp ./Steamworks-SDK/redistributable_bin/linux32/libsteam_api.so hlsteam/native/lib/linux32 > /dev/null
-          cp ./Steamworks-SDK/redistributable_bin/linux64/libsteam_api.so hlsteam/native/lib/linux64 > /dev/null
-          cp ./hlmod-hl/src/hl.h hlsteam/native/include > /dev/null
+          cp ./Steamworks-SDK/public/steam/*.h hlsteam/native/include/steam/
+          cp ./Steamworks-SDK/redistributable_bin/linux64/libsteam_api.so hlsteam/native/lib/linux64/
+          cp ./hlmod-hl/src/hl.h hlsteam/native/include/
+          
           cd hlsteam
-          make CFLAGS="-I../hlmod-hl/include/hashlink" LFLAGS="-L../hlmod-hl/build/bin"
-          cp steam.hdll ../hlmod-hl/build/bin/steam.hdll
-          patchelf --set-rpath '$ORIGIN' ../hlmod-hl/build/bin/steam.hdll
+          make CXXFLAGS="-Inative/include" LFLAGS="-L../hlmod-hl/build/bin"
           cd ..
-          cp ./Steamworks-SDK/redistributable_bin/linux64/libsteam_api.so hlmod-hl/build/bin/libsteam_api.so
+
+          cp ./hlsteam/steam.hdll ./hlmod-hl/build/bin/
+          patchelf --set-rpath '$ORIGIN' ./hlmod-hl/build/bin/steam.hdll
+          cp ./Steamworks-SDK/redistributable_bin/linux64/libsteam_api.so ./hlmod-hl/build/bin/
 
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4
