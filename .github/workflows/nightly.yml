@@ -13,18 +13,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # - os: ubuntu-latest
-          #   build_type: Debug
-          #   compiler: gcc
-          #   cc: gcc
-          #   cxx: g++
-          #   python: '3.13'
-          # - os: ubuntu-latest
-          #   build_type: Release
-          #   compiler: gcc
-          #   cc: gcc
-          #   cxx: g++
-          #   python: '3.13'
+          - os: ubuntu-latest
+            build_type: Debug
+            compiler: gcc
+            cc: gcc
+            cxx: g++
+            python: '3.13'
+          - os: ubuntu-latest
+            build_type: Release
+            compiler: gcc
+            cc: gcc
+            cxx: g++
+            python: '3.13'
           # - os: ubuntu-latest
           #   build_type: Debug
           #   compiler: clang
@@ -37,14 +37,15 @@ jobs:
           #   cc: clang
           #   cxx: clang++
           #   python: 3.13
-          # - os: windows-latest
-          #   build_type: Debug
-          #   compiler: msvc
-          #   python: '3.13'
+          - os: windows-latest
+            build_type: Debug
+            compiler: msvc
+            python: '3.13'
           - os: windows-latest
             build_type: Release
             compiler: msvc
             python: '3.13'
+          # TODO: fix mingw threads
           # - os: windows-latest
           #   build_type: Debug
           #   compiler: mingw
@@ -98,10 +99,9 @@ jobs:
         Remove-Item -Recurse "$HLMOD_INCLUDE_DIR/openal_temp"
         Write-Host "Extracted OpenAL-Soft to $OPENAL_DIR"
 
-
-    - name: Install Windows dependencies (MSVC)
-      if: runner.os == 'Windows' && matrix.compiler == 'msvc'
-      run: choco install ninja
+    # - name: Install Windows dependencies (MSVC)
+    #   if: runner.os == 'Windows' && matrix.compiler == 'msvc'
+    #   run: choco install ninja
 
     - name: Install Windows dependencies (MinGW)
       if: runner.os == 'Windows' && matrix.compiler == 'mingw'
@@ -156,7 +156,7 @@ jobs:
 
     - name: Build with CMake (Windows/MSVC)
       if: runner.os == 'Windows' && matrix.compiler == 'msvc'
-      run: cmake --build hlmod-hl/build --parallel -v
+      run: cmake --build hlmod-hl/build --parallel
 
     - name: Build with CMake (Widnows/MinGW)
       if: runner.os == 'Windows' && matrix.compiler == 'mingw'
