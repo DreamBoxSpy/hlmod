@@ -40,6 +40,11 @@ jobs:
       with:
         submodules: 'recursive'
 
+    - name: Set up Python 3.13
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+
     - uses: krdlab/setup-haxe@v1
       with:
         haxe-version: latest
@@ -117,7 +122,18 @@ jobs:
         echo "Copied standard library to artifact directory."
 
         patchelf --set-rpath '$ORIGIN' $ARTIFACT_DIR/hl
-        echo "Set RPATH on 'hl' executable to '$ORIGIN'."
+        echo "Set RPATH on hl."
+
+        mv $ARTIFACT_DIR/hl $ARTIFACT_DIR/hl.bin
+        cat << 'EOF' > $ARTIFACT_DIR/hl
+        #!/bin/sh
+        # This script sets up the environment for the real 'hl.bin' executable.
+
+        DIR=$(cd "$(dirname "$0")" && pwd)
+        export PYTHONHOME="$DIR"
+        export PYTHONPATH="$(find . -name python*)"
+        exec "$DIR/hl.bin" "$@"
+        EOF
 
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4
