@@ -51,7 +51,7 @@ jobs:
           libsdl2-dev libglu1-mesa-dev libmbedtls-dev libuv1-dev \
           libsqlite3-dev ninja-build
 
-    - name: Configure CMake on Linux
+    - name: Configure CMake (Linux)
       if: runner.os == 'Linux'
       env:
           CC: ${{ matrix.cc }}
@@ -62,6 +62,29 @@ jobs:
 
     - name: Build with CMake
       run: cmake --build hlmod-hl/build --parallel
+    
+    - name: Build hlsteam (Linux)
+      if: runner.os == 'Linux'
+      env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+      run: |
+          mkdir -p hlsteam/native/include/steam
+          mkdir -p hlsteam/native/lib/win32
+          mkdir -p hlsteam/native/lib/osx64
+          mkdir -p hlsteam/native/lib/linux32
+          mkdir -p hlsteam/native/lib/linux64
+          cp ./Steamworks-SDK/public/steam/*.h hlsteam/native/include/steam
+          cp ./Steamworks-SDK/redistributable_bin/steam_api.dll hlsteam/native/lib/win32 > /dev/null
+          cp ./Steamworks-SDK/redistributable_bin/steam_api.lib hlsteam/native/lib/win32 > /dev/null
+          cp ./Steamworks-SDK/redistributable_bin/osx/libsteam_api.dylib hlsteam/native/lib/osx64 > /dev/null
+          cp ./Steamworks-SDK/redistributable_bin/linux32/libsteam_api.so hlsteam/native/lib/linux32 > /dev/null
+          cp ./Steamworks-SDK/redistributable_bin/linux64/libsteam_api.so hlsteam/native/lib/linux64 > /dev/null
+          cp ./hlmod-hl/src/hl.h hlsteam/native/include > /dev/null
+          cd hlsteam && make
+          cp hlsteam/steam.hdll hlmod-hl/build/bin/steam.hdll
+          patchelf --set-rpath '$ORIGIN' hlmod-hl/build/bin/steam.hdll
+          cp ./Steamworks-SDK/redistributable_bin/linux64/libsteam_api.so hlmod-hl/build/bin/libsteam_api.so
 
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4
