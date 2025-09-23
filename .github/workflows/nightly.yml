@@ -13,18 +13,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
-            build_type: Debug
-            compiler: gcc
-            cc: gcc
-            cxx: g++
-            python: '3.13'
-          - os: ubuntu-latest
-            build_type: Release
-            compiler: gcc
-            cc: gcc
-            cxx: g++
-            python: '3.13'
+          # - os: ubuntu-latest
+          #   build_type: Debug
+          #   compiler: gcc
+          #   cc: gcc
+          #   cxx: g++
+          #   python: '3.13'
+          # - os: ubuntu-latest
+          #   build_type: Release
+          #   compiler: gcc
+          #   cc: gcc
+          #   cxx: g++
+          #   python: '3.13'
           # - os: ubuntu-latest
           #   build_type: Debug
           #   compiler: clang
@@ -37,6 +37,22 @@ jobs:
           #   cc: clang
           #   cxx: clang++
           #   python: 3.13
+          # - os: windows-latest
+          #   build_type: Debug
+          #   compiler: msvc
+          #   python: '3.13'
+          # - os: windows-latest
+          #   build_type: Release
+          #   compiler: msvc
+          #   python: '3.13'
+          # - os: windows-latest
+          #   build_type: Debug
+          #   compiler: mingw
+          #   python: '3.13'
+          - os: windows-latest
+            build_type: Release
+            compiler: mingw
+            python: '3.13'
 
     steps:
     - name: Checkout repository
@@ -65,6 +81,23 @@ jobs:
           libsdl2-dev libglu1-mesa-dev libmbedtls-dev libuv1-dev \
           libsqlite3-dev ninja-build patchelf
 
+    - name: Install Windows dependencies (MSVC)
+      if: runner.os == 'Windows' && matrix.compiler == 'msvc'
+      run: choco install ninja
+
+    - name: Install Windows dependencies (MinGW)
+      if: runner.os == 'Windows' && matrix.compiler == 'mingw'
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: MINGW64
+        update: true
+        install: >-
+          mingw-w64-x86_64-toolchain
+          mingw-w64-x86_64-cmake
+          mingw-w64-x86_64-ninja
+          mingw-w64-x86_64-SDL2
+          mingw-w64-x86_64-openal
+
     - name: Configure CMake (Linux)
       if: runner.os == 'Linux'
       env:
@@ -73,6 +106,19 @@ jobs:
       run: |
           cmake -S hlmod-hl -B hlmod-hl/build -G "Ninja" \
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+
+    - name: Configure CMake (Windows/MSVC)
+      if: runner.os == 'Windows' && matrix.compiler == 'msvc'
+      run: |
+          cmake -S hlmod-hl -B hlmod-hl/build -G "Ninja" `
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+
+    - name: Configure CMake (Windows/MinGW)
+      if: runner.os == 'Windows' && matrix.compiler == 'mingw'
+      shell: msys2 {0}
+      run: |
+          cmake -S hlmod-hl -B hlmod-hl/build -G "Ninja" `
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
 
     - name: Build with CMake
       run: cmake --build hlmod-hl/build --parallel
@@ -97,6 +143,22 @@ jobs:
           patchelf --set-rpath '$ORIGIN' ./hlmod-hl/build/bin/steam.hdll
           cp ./Steamworks-SDK/redistributable_bin/linux64/libsteam_api.so ./hlmod-hl/build/bin/
           chmod 775 ./hlmod-hl/build/bin/libsteam_api.so
+
+    - name: Build hlsteam (Windows/MinGW)
+      if: runner.os == 'Windows' && matrix.compiler == 'mingw'
+      shell: msys2 {0}
+      run: |
+          # The GNU Makefile works in MSYS2, but we need to adjust for Windows DLLs
+          mkdir -p hlsteam/native/include/steam hlsteam/native/lib/win64
+          cp ./Steamworks-SDK/public/steam/*.h hlsteam/native/include/steam/
+          cp ./Steamworks-SDK/redistributable_bin/win64/steam_api64.lib hlsteam/native/lib/win64/
+          cp ./hlmod-hl/src/hl.h hlsteam/native/include/
+          cd hlsteam
+          make CXXFLAGS="-Inative/include" LFLAGS="-L../hlmod-hl/build/bin -Lnative/lib/win64"
+          cd ..
+          cp ./hlsteam/steam.dll ./hlmod-hl/build/bin/
+          cp ./Steamworks-SDK/redistributable_bin/win64/steam_api64.dll ./hlmod-hl/build/bin/
+
 
     - name: Package for Distribution (Linux)
       if: runner.os == 'Linux'
@@ -138,6 +200,23 @@ jobs:
         export PYTHONPATH="$(find . -name python*)"
         exec "$DIR/hl.bin" "$@"
         EOF
+        chmod 775 $ARTIFACT_DIR/hl
+
+    - name: Package for Distribution (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        $ARTIFACT_DIR = "hlmod-hl/build/bin"
+        
+        Copy-Item -Path "mods" -Destination $ARTIFACT_DIR -Recurse
+
+        $PYTHON_DLL_PATH = Get-Command python | Select-Object -ExpandProperty Source | Split-Path | Join-Path -ChildPath "python*.dll"
+        Copy-Item -Path $PYTHON_DLL_PATH -Destination $ARTIFACT_DIR
+        Write-Host "Copied Python DLL to artifact directory."
+
+        $STDLIB_PATH = python -c 'import sysconfig; print(sysconfig.get_path("stdlib"))'
+        Copy-Item -Path $STDLIB_PATH -Destination $ARTIFACT_DIR -Recurse
+        Write-Host "Copied Python standard library to artifact directory."
 
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4
