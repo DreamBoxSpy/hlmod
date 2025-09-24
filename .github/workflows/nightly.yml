@@ -160,9 +160,7 @@ jobs:
     - name: Build with CMake (Widnows/MinGW)
       if: runner.os == 'Windows' && matrix.compiler == 'mingw'
       shell: msys2 {0}
-      env:
-        DXCOMPILER_LIB_PATH: ${{ steps.generate_dxcompiler_lib.outputs.DXCOMPILER_LIB_PATH }}
-      run: cmake --build hlmod-hl/build --parallel -DCMAKE_PREFIX_PATH=$DXCOMPILER_LIB_PATH
+      run: cmake --build hlmod-hl/build --parallel
 
     - name: Build hlsteam (Linux)
       if: runner.os == 'Linux'
