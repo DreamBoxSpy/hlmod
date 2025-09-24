@@ -136,4 +136,4 @@ Then, binaries will be at `hlmod-hl/build/bin`, as normal.
 In the HL VM, a few fixes and tweaks have been made or merged from upstream PRs:
 
 - HaxeFoundation/hashlink#795 (Add newline to `--version` print)
-- HaxeFoundation/hashlink#482 (Fix MinGW build)
+- HaxeFoundation/hashlink#482 and HaxeFoundation/hashlink#831 (Fix MinGW build)
