@@ -46,10 +46,6 @@ jobs:
             compiler: msvc
             python: '3.13'
           - os: windows-latest
-            build_type: Debug
-            compiler: mingw
-            python: '3.13'
-          - os: windows-latest
             build_type: Release
             compiler: mingw
             python: '3.13'
