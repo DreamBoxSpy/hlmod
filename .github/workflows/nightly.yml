@@ -114,6 +114,7 @@ jobs:
           mingw-w64-x86_64-ninja
           mingw-w64-x86_64-SDL2
           mingw-w64-x86_64-openal
+          mingw-w64-x86_64-make
 
     - name: Setup MSVC
       if: runner.os == 'Windows' && matrix.compiler == 'msvc'
