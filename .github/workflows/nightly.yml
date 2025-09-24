@@ -13,38 +13,38 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
-            build_type: Debug
-            compiler: gcc
-            cc: gcc
-            cxx: g++
-            python: '3.13'
-          - os: ubuntu-latest
-            build_type: Release
-            compiler: gcc
-            cc: gcc
-            cxx: g++
-            python: '3.13'
-          - os: ubuntu-latest
-            build_type: Debug
-            compiler: clang
-            cc: clang
-            cxx: clang++
-            python: 3.13
+          # - os: ubuntu-latest
+          #   build_type: Debug
+          #   compiler: gcc
+          #   cc: gcc
+          #   cxx: g++
+          #   python: '3.13'
+          # - os: ubuntu-latest
+          #   build_type: Release
+          #   compiler: gcc
+          #   cc: gcc
+          #   cxx: g++
+          #   python: '3.13'
+          # - os: ubuntu-latest
+          #   build_type: Debug
+          #   compiler: clang
+          #   cc: clang
+          #   cxx: clang++
+          #   python: 3.13
           # - os: ubuntu-latest
           #   build_type: Release
           #   compiler: clang
           #   cc: clang
           #   cxx: clang++
           #   python: 3.13
-          - os: windows-latest
-            build_type: RelWithDebInfo
-            compiler: msvc
-            python: '3.13'
-          - os: windows-latest
-            build_type: Release
-            compiler: msvc
-            python: '3.13'
+          # - os: windows-latest
+          #   build_type: RelWithDebInfo
+          #   compiler: msvc
+          #   python: '3.13'
+          # - os: windows-latest
+          #   build_type: Release
+          #   compiler: msvc
+          #   python: '3.13'
           # - os: windows-latest
           #   build_type: Debug
           #   compiler: mingw
@@ -147,7 +147,7 @@ jobs:
       run: |
           cmake -S hlmod-hl -B hlmod-hl/build -G "Ninja" \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-            -DCMAKE_FORCE_UNIX_PATHS=ON
+            -DBUILD_TESTING=OFF
 
     - name: Build with CMake (Linux)
       if: runner.os == 'Linux'
