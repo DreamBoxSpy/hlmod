@@ -115,32 +115,6 @@ jobs:
           mingw-w64-x86_64-SDL2
           mingw-w64-x86_64-openal
 
-    - name: Find dxcompiler.dll and generate lib
-      if: runner.os == 'Windows' && matrix.compiler == 'mingw'
-      id: generate_dxcompiler_lib
-      shell: pwsh
-      run: |
-        $dxcPath = Get-ChildItem -Path "C:\Program Files (x88)\Windows Kits\10\bin" -Filter "dxcompiler.dll" -Recurse | Sort-Object -Property LastWriteTime -Descending | Select-Object -First 1
-        if (-not $dxcPath) {
-          Write-Error "dxcompiler.dll not found on the runner!"
-          exit 1
-        }
-        $dxcDir = $dxcPath.DirectoryName
-        Write-Host "Found dxcompiler.dll at: $dxcDir"
-
-        $libDir = New-Item -Path ${{ runner.temp }} -Name "dxcompiler-lib" -ItemType Directory
-        Write-Host "Created temporary library directory: $($libDir.FullName)"
-
-        $msys2_shell_path = "C:\msys64\usr\bin\bash.exe"
-        & $msys2_shell_path -lc "cd '$($libDir.FullName)'; dlltool -d dxcompiler.def -l libdxcompiler.a -D '$($dxcDir)\dxcompiler.dll'"
-
-        if (-not (Test-Path "$($libDir.FullName)\libdxcompiler.a")) {
-          Write-Error "Failed to generate libdxcompiler.a!"
-          exit 1
-        }
-
-        echo "DXCOMPILER_LIB_PATH=$($libDir.FullName)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-
     - name: Setup MSVC
       if: runner.os == 'Windows' && matrix.compiler == 'msvc'
       uses: ilammy/msvc-dev-cmd@v1
