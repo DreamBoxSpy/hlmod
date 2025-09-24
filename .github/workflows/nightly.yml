@@ -198,7 +198,7 @@ jobs:
       shell: msys2 {0}
       run: |
           cd hlsteam
-          mingw32-make CXXFLAGS="-Inative/include" LFLAGS="-L../hlmod-hl/build/bin -Lnative/lib/win64"
+          mingw32-make CXX=g++ CC=g++ CXXFLAGS="-Inative/include" LFLAGS="-L../hlmod-hl/build/bin -Lnative/lib/win64 -lsteam_api64 -llibhl"
           cd ..
           cp ./hlsteam/steam.hdll ./hlmod-hl/build/bin/steam.hdll
           cp ./Steamworks-SDK/redistributable_bin/win64/steam_api64.dll ./hlmod-hl/build/bin/steam_api64.dll
