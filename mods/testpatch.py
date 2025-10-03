@@ -19,7 +19,12 @@ def initialize():
     # assert_code_sha("52ac527751d7aa20d1be9024de88628f389336dbed3d915d82f55cabf58c3617")
     pass
 
-@hook(224)
+@hook("TestClass.do_a_thing")
+def hook_do_a_thing(self: Hook, this: TestClass):
+    self.call_original(this)
+    print("Hooked do a thing!!")
+
+@hook("$PatchMe.thing")
 def thing(self: Hook, val: float, val2: Optional[float], msg: str, val3: Optional[TestClass]):
     print("Hook!")
     val = 2.0
@@ -33,3 +38,7 @@ def thing(self: Hook, val: float, val2: Optional[float], msg: str, val3: Optiona
     print(s_supertestclass.STATIC_VAL)
     self.call_original(val, val2, msg, val3)
 
+@hook("$PatchMe.main")
+def hook_main(self: Hook):
+    self.call_original()
+    print("Called and hooked main!!")

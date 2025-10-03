@@ -8,21 +8,22 @@ MOD_INFO = {
 }
 
 from typing import Any, Optional
-from hlmod import assert_code_sha, Hook
+from hlmod import assert_code_sha, Hook, findex_for_name
 import hlmod
 from modcore import hook
 from stubs.en import Hero
 from stubs.libs import S_GitVersion
-from stubs.ui import Console
-from stubs.h2d import Console as h2dConsole
+from stubs import ui
+from stubs import h2d
 from stubs.pr import TitleScreen
 
 def initialize() -> None:
     # assert_code_sha("376564ab2173ddcbadf53d73baf2fc335793e4d14a637fc1829569c314f39667") # TODO: support matching a list of hashes
-    assert_code_sha("d5d17575f4bec6ab674a9cac56fba5fd696576f23fc1b22e32629bcafba92ad3")
+    # assert_code_sha("d5d17575f4bec6ab674a9cac56fba5fd696576f23fc1b22e32629bcafba92ad3")
+    pass
     
 # globals and whatnot
-CONSOLE: Optional[Console] = None
+CONSOLE: Optional[ui.Console] = None
 
 # config for default tweaks. changeme!
 PREDICTABLE_STAMP: bool = True # return a predictable stamp value from $PakUtils.getPakStampHash so changes to version info in the game don't invalidate your paks
@@ -46,7 +47,7 @@ def set_build_text(text: str) -> None:
     BUILD_TEXT = text
 
 @hook("ui.$Console.__constructor__")
-def hook_console_ctor(self: Hook, this: Console):
+def hook_console_ctor(self: Hook, this: ui.Console):
     global CONSOLE
     CONSOLE = this
     self.call_original(this)
@@ -54,9 +55,9 @@ def hook_console_ctor(self: Hook, this: Console):
     log("Console initialized!")
     
 @hook("ui.Console.log")
-def hook_console_log(self: Hook, this: Console, logText: str, color: Optional[int]):
+def hook_console_log(self: Hook, this: ui.Console, logText: str, color: Optional[int]):
     print(f"[dcmod] [Console] {logText}")
-    h2dConsole.log(this, logText, color)
+    h2d.Console.log(this, logText, color)
 
 @hook("pr.TitleScreen.setMiscTexts")
 def hook_titlescreen_setMiscTexts(self: Hook, this: TitleScreen):
