@@ -131,6 +131,11 @@ Then, binaries will be at `hlmod-hl/build/bin`, as normal.
 - The end user shouldn't have to memorize internal HL incantations to be able to write a basic mod. When in doubt, cast to and from a similar builtin Python class rather than write a full wrapper that may have incompatibilities with Python's `std`.
 - Keep low-level APIs on the C side, then wrap them in nice Pythonic functions in `modcore`. For example, `hlmod.register_hook` is wrapped by a Pythonic decorator in `modcore.hook`.
 
+## Known Issues
+
+- Anything that depends on older versions of HL's DirectX APIs will crash and sometimes even segfault.
+  - Dead Cells provides an OpenGL-only executable, use that if possible.
+
 ## What's Changed?
 
 In the HL VM, a few fixes and tweaks have been made or merged from upstream PRs:
