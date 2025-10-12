@@ -27,7 +27,6 @@ CONSOLE: Optional[ui.Console] = None
 
 # config for default tweaks. changeme!
 PREDICTABLE_STAMP: bool = True # return a predictable stamp value from $PakUtils.getPakStampHash so changes to version info in the game don't invalidate your paks
-IGNORE_STAMP: bool = True # ignore stamp checking altogether during pak load
 INGAME_LOGS: bool = True
 LOG_COLOR: int = 0xffffff
 CUSTOM_BUILD_TEXT: bool = True
@@ -73,6 +72,7 @@ def hook_pakutils_getPakStampHash(self: Hook) -> str:
 
 @hook("tool.log.$LogUtils.log")
 def hook_logutils_log(self: Hook, text: str, severity: Any, pos: Any):
+    print(text)
     if CONSOLE:
         CONSOLE.log(text, 0xb8fcf7)
     self.call_original(text, severity, pos)

@@ -36,7 +36,7 @@ def hook(fidx_or_name: str|int|List[int]):
             hlmod.register_hook(fidx_or_name, func) # pyright: ignore[reportAttributeAccessIssue]
         elif isinstance(fidx_or_name, str):
             fidx = hlmod.findex_for_name(fidx_or_name)
-            # print(f"[hlmod] [DEBUG] Hooking {fidx_or_name} to {fidx} with {func.__name__}")
+            print(f"[hlmod DEBUG] Hooking {fidx_or_name} to {fidx} with {func.__name__}")
             hlmod.register_hook(fidx, func)
         else:
             for fidx in fidx_or_name:
