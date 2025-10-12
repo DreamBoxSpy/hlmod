@@ -43,7 +43,9 @@ hlmod aims to be a truly generic, easy-to-use Hashlink modding framework that Ju
 ## Building
 
 > [!NOTE]
-> You can download the latest nightlies for Linux (and hopefully soon, Windows) from [the nightly.link](https://nightly.link/N3rdL0rd/hlmod/workflows/nightly/main).
+> You can download the latest nightlies for Linux and Windows from [the nightly.link](https://nightly.link/N3rdL0rd/hlmod/workflows/nightly/main). OSX builds are NOT supported.
+
+If you want to cross-compile locally, you can use [act](https://github.com/nektos/act).
 
 You'll need to first satisfy all the build requirements in HL's README:
 
@@ -90,7 +92,7 @@ You'll also need Ninja installed, do `choco install ninja` or `scoop install nin
 ### Compiling
 
 > [!WARNING]
-> MacOS is not supported yet. The only supported targets are Linux (glibc) and Windows (MSVC). musl *should* work, and so should Cygwin, but they are untested and unsupported.
+> MacOS is not supported yet. The only supported targets are Linux (glibc) and Windows (MSVC). musl *should* work, and so should Cygwin/MinGW/MSYS2, but they are untested and unsupported. Nightly builds for MinGW are provided but are not supported and may be broken.
 
 The Justfile has recipes in it to handle this for you:
 
