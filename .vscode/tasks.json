@@ -1,0 +1,69 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "hlmod: Build (Windows)",
+            "type": "shell",
+            "command": "just build-win",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "hlmod: Build (Windows, Debug)",
+            "type": "shell",
+            "command": "just build-win-debug",
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": "$msCompile",
+        },
+        {
+            "label": "hlmod: Configure (Windows)",
+            "type": "shell",
+            "command": "just prepare-win",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "hlmod: Configure (Windows, Debug)",
+            "type": "shell",
+            "command": "just prepare-win-debug",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "hlmod: Run PatchMe.hl (Windows)",
+            "type": "shell",
+            "command": "just run-win",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "hlmod: Build hlsteam (Windows)",
+            "type": "shell",
+            "command": "just hlsteam-win",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}
