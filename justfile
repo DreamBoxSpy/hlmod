@@ -16,9 +16,18 @@ prepare-win:
     mkdir hlmod-hl\build
     cd hlmod-hl\build && "{{MSVC_VARS_SCRIPT}}" x64 && cmake -G "Ninja" .. -DCMAKE_TOOLCHAIN_FILE=D:/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows -DCMAKE_BUILD_TYPE=Release
 
+prepare-win-debug:
+    #!cmd.exe /C
+    IF EXIST hlmod-hl\build rmdir /s /q hlmod-hl\build
+    mkdir hlmod-hl\build
+    cd hlmod-hl\build && "{{MSVC_VARS_SCRIPT}}" x64 && cmake -G "Ninja" .. -DCMAKE_TOOLCHAIN_FILE=D:/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows -DCMAKE_BUILD_TYPE=Debug
+
 build-win:
     #!cmd.exe /C
     cd hlmod-hl\build && "{{MSVC_VARS_SCRIPT}}" x64 && cmake --build . --parallel
+
+build-win-debug:
+    @just build-win
 
 run:
     PYTHONPATH=/home/nerd/code/hlmod/.venv hlmod-hl/build/bin/hl PatchMe.hl
