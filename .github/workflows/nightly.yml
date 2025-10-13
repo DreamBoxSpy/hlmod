@@ -59,6 +59,13 @@ jobs:
           #   python: '3.13'
 
     steps:
+    - name: Install Linux dependencies (musl/Alpine)
+      if: matrix.container == 'alpine:latest'
+      run: |
+        apk add --no-cache \
+          git g++ make cmake ninja patchelf python3 py3-pip \
+          libpng-dev libjpeg-turbo-dev libvorbis-dev openal-soft-dev \
+          sdl2-dev mesa-dev mbedtls-dev libuv-dev sqlite-dev
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
@@ -77,14 +84,6 @@ jobs:
           libpng-dev libturbojpeg-dev libvorbis-dev libopenal-dev \
           libsdl2-dev libglu1-mesa-dev libmbedtls-dev libuv1-dev \
           libsqlite3-dev ninja-build patchelf
-
-    - name: Install Linux dependencies (musl/Alpine)
-      if: matrix.container == 'alpine:latest'
-      run: |
-        apk add --no-cache \
-          g++ make cmake ninja patchelf python3 py3-pip \
-          libpng-dev libjpeg-turbo-dev libvorbis-dev openal-soft-dev \
-          sdl2-dev mesa-dev mbedtls-dev libuv-dev sqlite-dev
 
     - name: Prepare Hashlink third-party includes (Windows)
       if: runner.os == 'Windows'
