@@ -9,18 +9,10 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-    container: ${{ matrix.container }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
-            build_type: Debug
-            compiler: gcc-musl
-            cc: gcc
-            cxx: g++
-            python: '3.13'
-            container: alpine:latest
           - os: ubuntu-latest
             build_type: Debug
             compiler: gcc
@@ -59,13 +51,6 @@ jobs:
           #   python: '3.13'
 
     steps:
-    - name: Install Linux dependencies (musl/Alpine)
-      if: matrix.container == 'alpine:latest'
-      run: |
-        apk add --no-cache \
-          git g++ make cmake ninja patchelf python3 py3-pip \
-          libpng-dev libjpeg-turbo-dev libvorbis-dev openal-soft-dev \
-          sdl2-dev mesa-dev mbedtls-dev libuv-dev sqlite-dev
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
@@ -76,8 +61,8 @@ jobs:
       with:
         python-version: ${{ matrix.python }}
 
-    - name: Install Linux dependencies (glibc)
-      if: runner.os == 'Linux' && !matrix.container
+    - name: Install Linux dependencies
+      if: runner.os == 'Linux'
       run: |
         sudo apt-get update
         sudo apt-get install -y --no-install-recommends \
@@ -144,14 +129,8 @@ jobs:
           CC: ${{ matrix.cc }}
           CXX: ${{ matrix.cxx }}
       run: |
-          EXTRA_CMAKE_FLAGS=""
-          if [ "${{ matrix.compiler }}" = "gcc-musl" ]; then
-            # Statically link for musl builds
-            EXTRA_CMAKE_FLAGS="-DCMAKE_EXE_LINKER_FLAGS=-static -DCMAKE_SHARED_LINKER_FLAGS=-static"
-          fi
           cmake -S hlmod-hl -B hlmod-hl/build -G "Ninja" \
-            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-            $EXTRA_CMAKE_FLAGS
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
 
     - name: Configure CMake (Windows/MSVC)
       if: runner.os == 'Windows' && matrix.compiler == 'msvc'
@@ -193,11 +172,7 @@ jobs:
           cp ./hlmod-hl/src/hl.h hlsteam/native/include/
           
           cd hlsteam
-          LFLAGS_EXTRA=""
-          if [ "${{ matrix.compiler }}" = "gcc-musl" ]; then
-            LFLAGS_EXTRA="-static"
-          fi
-          make CXXFLAGS="-Inative/include" LFLAGS="-L../hlmod-hl/build/bin $LFLAGS_EXTRA"
+          make CXXFLAGS="-Inative/include" LFLAGS="-L../hlmod-hl/build/bin"
           cd ..
 
           cp ./hlsteam/steam.hdll ./hlmod-hl/build/bin/
@@ -253,17 +228,15 @@ jobs:
 
         cp -r mods/ $ARTIFACT_DIR/mods/
 
-        if [ "${{ matrix.compiler }}" != "gcc-musl" ]; then
-          LIBPYTHON_PATH=$(ldd $ARTIFACT_DIR/hl | grep libpython | awk '{print $3}')
-          if [ ! -f "$LIBPYTHON_PATH" ]; then
-              echo "ERROR: Could not find libpython path from ldd output."
-              exit 1
-          fi
-          echo "Found libpython at: $LIBPYTHON_PATH"
-
-          cp "$LIBPYTHON_PATH" "$ARTIFACT_DIR/"
-          echo "Copied libpython to artifact directory."
+        LIBPYTHON_PATH=$(ldd $ARTIFACT_DIR/hl | grep libpython | awk '{print $3}')
+        if [ ! -f "$LIBPYTHON_PATH" ]; then
+            echo "ERROR: Could not find libpython path from ldd output."
+            exit 1
         fi
+        echo "Found libpython at: $LIBPYTHON_PATH"
+
+        cp "$LIBPYTHON_PATH" "$ARTIFACT_DIR/"
+        echo "Copied libpython to artifact directory."
 
         STDLIB_PATH=$(python3 -c 'import sysconfig; print(sysconfig.get_path("stdlib"))')
         if [ ! -d "$STDLIB_PATH" ]; then
@@ -275,10 +248,8 @@ jobs:
         cp -r "$STDLIB_PATH" "$ARTIFACT_DIR/"
         echo "Copied standard library to artifact directory."
 
-        if [ "${{ matrix.compiler }}" != "gcc-musl" ]; then
-          patchelf --set-rpath '$ORIGIN' $ARTIFACT_DIR/hl
-          echo "Set RPATH on hl."
-        fi
+        patchelf --set-rpath '$ORIGIN' $ARTIFACT_DIR/hl
+        echo "Set RPATH on hl."
 
         mv $ARTIFACT_DIR/hl $ARTIFACT_DIR/hl.bin
         cat << 'EOF' > $ARTIFACT_DIR/hl
