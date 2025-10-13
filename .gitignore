@@ -21,3 +21,4 @@ save/
 logs/
 files.txt
 *.dll
+hlmod_py*.log
